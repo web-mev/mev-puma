@@ -1,0 +1,40 @@
+{
+    "name": "PUMA (miRNA Regulatory Networks).", 
+    "description": "PUMA (PANDA using microRNA Associations) is an augmentation of the PANDA algorithm to make inferences about microRNA regulation of target genes. Further information is available at <a href=\"https://academic.oup.com/bioinformatics/article/doi/10.1093/bioinformatics/btaa571/5858977\">https://academic.oup.com/bioinformatics/article/doi/10.1093/bioinformatics/btaa571/5858977</a>", 
+    "inputs": {
+        "MevPuma.exprs_file": {
+            "description": "The input matrix- a gene expression matrix for a cohort of samples.", 
+            "name": "Input matrix:", 
+            "required": true, 
+            "converter": "api.converters.data_resource.CromwellSingleVariableDataResourceConverter",
+            "spec": {
+                "attribute_type": "VariableDataResource", 
+                "resource_types": ["MTX","I_MTX", "EXP_MTX", "RNASEQ_COUNT_MTX"], 
+                "many": false
+            }
+        }, 
+        "MevPuma.identifier_choice": {
+            "description":"Which gene identifiers are used in your expression matrix? Symbols correspond with common gene names while Ensembl identifiers start with ENSG.",
+            "name":"Gene identifier:",
+            "required": true,
+            "converter": "api.converters.basic_attributes.StringConverter",
+            "spec": {
+                "attribute_type": "OptionString", 
+                "options": ["Symbol", "Ensembl"]
+            }
+        }
+    }, 
+    "outputs": {
+        "MevPuma.panda_output_matrix": {
+            "required": true,
+            "converter": "api.converters.data_resource.CromwellSingleDataResourceConverter",
+            "spec": {
+                "attribute_type": "DataResource", 
+                "resource_type": "NS",
+                "many": false
+            }
+        }
+    }, 
+    "mode": "cromwell",
+    "workspace_operation": true
+}
