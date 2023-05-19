@@ -2,16 +2,13 @@ workflow MevPuma {
 
     String identifier_choice
 
+    # TODO: change these once we get miRNA priors
     Map[String, File] motifMap = {
-        "Symbol":"s3://webmev-public/tissues_motif.symbol.tsv",
-        "Ensembl":"s3://webmev-public/tissues_motif.ensg.tsv"
+        "Symbol":"s3://webmev-public/puma_mirna_priors.symbol.tsv",
+        "Ensembl":"s3://webmev-public/puma_mirna_priors.ensg.tsv"
     }
 
     File motif_file = motifMap[identifier_choice]
-
-    # A PPI file. Since the matrix from this file does not multiply
-    # with the expression matrix, we do not need an "identifier-specific" version
-    File ppi_file = "s3://webmev-public/tissues_ppi.tsv"
 
     # A user uploaded exprs count matrix
     File exprs_file
@@ -21,7 +18,6 @@ workflow MevPuma {
     call runPuma {
         input:
             motif_file = motif_file,
-            ppi_file = ppi_file,
             exprs_file = exprs_file
     }
 
@@ -32,7 +28,6 @@ workflow MevPuma {
 
 task runPuma {
     File motif_file
-    File ppi_file
     File exprs_file
 
     # Don't want to expose this as user-defined variable, but want the 
@@ -45,7 +40,6 @@ task runPuma {
     command {
         python3 /opt/software/puma.py \
             --motif ${motif_file} \
-            --ppi ${ppi_file} \
             --output ${output_name} \
             --nmax ${nmax} \
             ${exprs_file}

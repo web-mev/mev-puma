@@ -25,7 +25,7 @@
         }
     }, 
     "outputs": {
-        "MevPuma.panda_output_matrix": {
+        "MevPuma.puma_output_matrix": {
             "required": true,
             "converter": "api.converters.data_resource.CromwellSingleDataResourceConverter",
             "spec": {

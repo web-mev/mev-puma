@@ -1,21 +1,17 @@
-
+import sys
 import argparse
+
 from netZooPy.puma import Puma
 import pandas as pd
-import sys
-
-DEFAULT_MOTIF_FILE = '/opt/software/resources/tissues_motif.tsv'
-DEFAULT_PPI_FILE = '/opt/software/resources/tissues_ppi.tsv'
 
 
 def run_puma(args):
     '''
     Runs PUMA object creation and exports output to file.
     '''
-    # Load the data as a pandas dataframes
+    # Load the data as dataframes
     exprs_df = pd.read_csv(args.exprs, index_col=0, header=0, sep="\t")
     motif_df = pd.read_csv(args.motif, header=None, sep="\t")
-    ppi_df = pd.read_csv(args.ppi, header=None, sep="\t")
 
     # Adding headers for the PANDAs obj to read
     motif_df.columns = ['source', 'target', 'weight']
@@ -35,23 +31,24 @@ def run_puma(args):
     exprs_df = exprs_df.nlargest(args.nmax, mean_col_name)
     exprs_df.drop(mean_col_name, axis=1, inplace=True)
 
-    # Running pandas with default expected paramaters
-    # save_memory = False results in outputting the PANDA network in edge format
+    # save_memory = False results in outputting the PUMA network in edge format
     # save_memory = True results in a matrix format
     # Pass the pandas dataframes directly rather than the PATHs.
     puma_obj = Puma(
         exprs_df,
         motif_df,
-        ppi_df,
+        # if ppi is None- this will set ppi to an identity matrix:
+        None,
         keep_expression_matrix=True,
         save_tmp=True,
         save_memory=False
     )
-    # Pull PANDA network out of object
+    # Pull PUMA network out of object
     out_mtx = pd.DataFrame(puma_obj.puma_network)
 
     # Get motif order
     motif_names_ordered = motif_df['source'].drop_duplicates(keep="first")
+    
     # Set headers and rownames to PUMA network
     out_mtx.set_index(motif_names_ordered, inplace=True)
     out_mtx.columns = exprs_df.index.values
@@ -65,23 +62,14 @@ def run_puma(args):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Runs PANDA on input count matrix."
+        description="Runs PUMA on input count matrix."
     )
 
     parser.add_argument(
         "--motif",
         metavar="TSV",
         required=False,
-        default=DEFAULT_MOTIF_FILE,
         help="Motif data"
-    )
-
-    parser.add_argument(
-        "--ppi",
-        metavar="TSV",
-        required=False,
-        default=DEFAULT_PPI_FILE,
-        help="PPI data"
     )
 
     parser.add_argument(
