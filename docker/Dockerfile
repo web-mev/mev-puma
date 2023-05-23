@@ -24,7 +24,6 @@ RUN wget https://github.com/netZoo/netZooPy/archive/refs/tags/0.9.14.tar.gz \
     tar xzvf /opt/software/0.9.14.tar.gz -C /opt/software && \
     pip3 install -e /opt/software/netZooPy-0.9.14/
 
-
 # Copy the bucket-based file into this Docker:
 # Note that for the WDL run, these files will be addressed directly.
 # However, failure of this step in the Docker build (e.g. as part of CI tools)
