@@ -13,7 +13,7 @@ def run_puma(args):
     exprs_df = pd.read_csv(args.exprs, index_col=0, header=0, sep="\t")
     motif_df = pd.read_csv(args.motif, header=None, sep="\t")
 
-    # Adding headers for the PANDAs obj to read
+    # Adding headers for the PUMA obj to read
     motif_df.columns = ['source', 'target', 'weight']
 
     # subset the expression dataframe to retain only the top NMAX
@@ -31,6 +31,11 @@ def run_puma(args):
     exprs_df = exprs_df.nlargest(args.nmax, mean_col_name)
     exprs_df.drop(mean_col_name, axis=1, inplace=True)
 
+    # we need to provide a file or list of the miRna (for historical reasons with PANDA)
+    # We simply need to grab the first column of the motif dataframe since that dataframe
+    # does not contain any 'regular' TFs
+    mirna_list = motif_df['source'].unique().tolist()
+
     # save_memory = False results in outputting the PUMA network in edge format
     # save_memory = True results in a matrix format
     # Pass the pandas dataframes directly rather than the PATHs.
@@ -39,6 +44,7 @@ def run_puma(args):
         motif_df,
         # if ppi is None- this will set ppi to an identity matrix:
         None,
+        mirna_list,
         keep_expression_matrix=True,
         save_tmp=True,
         save_memory=False
