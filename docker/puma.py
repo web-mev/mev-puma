@@ -1,4 +1,3 @@
-import sys
 import argparse
 
 from netZooPy.puma import Puma
@@ -52,12 +51,9 @@ def run_puma(args):
     # Pull PUMA network out of object
     out_mtx = pd.DataFrame(puma_obj.puma_network)
 
-    # Get motif order
-    motif_names_ordered = motif_df['source'].drop_duplicates(keep="first")
-    
     # Set headers and rownames to PUMA network
-    out_mtx.set_index(motif_names_ordered, inplace=True)
-    out_mtx.columns = exprs_df.index.values
+    out_mtx.index = puma_obj.unique_tfs
+    out_mtx.columns = puma_obj.gene_names
     out_mtx.transpose().to_csv(
         args.output,
         sep="\t",
