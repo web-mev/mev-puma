@@ -1,5 +1,5 @@
 {
-    "name": "PUMA (miRNA Regulatory Networks).", 
+    "name": "PUMA (miRNA Regulatory Networks)", 
     "description": "PUMA (PANDA using microRNA Associations) is an augmentation of the PANDA algorithm to make inferences about microRNA regulation of target genes. Further information is available at <a href=\"https://academic.oup.com/bioinformatics/article/doi/10.1093/bioinformatics/btaa571/5858977\">https://academic.oup.com/bioinformatics/article/doi/10.1093/bioinformatics/btaa571/5858977</a>", 
     "inputs": {
         "MevPuma.exprs_file": {
