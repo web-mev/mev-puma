@@ -38,7 +38,7 @@ task runPuma {
     Int disk_size = 40
 
     command {
-        python3 /opt/software/puma.py \
+        python3 /usr/local/bin/puma.py \
             --motif ${motif_file} \
             --output ${output_name} \
             --nmax ${nmax} \
